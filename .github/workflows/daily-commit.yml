@@ -1,0 +1,43 @@
+
+name: Daily Git Agent
+
+on:
+  schedule:
+    - cron: "30 3 * * *" # 9:00 AM IST daily
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  daily-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create daily activity entry
+        run: |
+          TODAY=$(TZ=Asia/Kolkata date +%Y-%m-%d)
+
+          if grep -q "Daily heartbeat: $TODAY" activity-log.md; then
+            echo "Today's entry already exists."
+            exit 0
+          fi
+
+          echo "- Daily heartbeat: $TODAY" >> activity-log.md
+
+      - name: Commit and push
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add activity-log.md
+          git commit -m "chore: daily activity heartbeat"
+          git push

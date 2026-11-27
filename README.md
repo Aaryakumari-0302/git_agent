@@ -4,7 +4,7 @@ A small GitHub Actions workflow that records one clearly labeled automated daily
 
 ## Automation
 
-- Runs daily at **5:00 pm India Standard Time** 
+- Runs daily at **7:00 pm India Standard Time** 
 - Can also be started manually from the **Actions** tab using **Run workflow**.
 - Uses the repository-scoped `GITHUB_TOKEN`; no personal access token is needed.
 - Writes one dated entry to `activity-log.md` and commits it.
